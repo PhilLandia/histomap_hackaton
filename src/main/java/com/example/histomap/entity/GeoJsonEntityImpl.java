@@ -1,6 +1,6 @@
 package com.example.histomap.entity;
 
-public class AbstractGeoJsonEntity implements GeoJsonEntity {
+public class GeoJsonEntityImpl implements GeoJsonEntity {
     GeoJsonGeometry geometry;
     String type;
 
