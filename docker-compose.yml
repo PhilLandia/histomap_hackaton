@@ -1,0 +1,9 @@
+services:
+  qgis_server:
+    image: camptocamp/qgis-server
+    volumes:
+      - ./app_data/qgisserver:/etc/qgisserver
+    ports:
+      - "8080:80"
+    environment:
+      - QGIS_SERVER_LANDING_PAGE_PROJECTS_DIRECTORIES=/etc/qgisserver
