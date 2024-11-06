@@ -1,6 +1,6 @@
 package com.example.histomap.entity;
 
 public interface GeoJsonGeometry {
-    float[] getCoordinates();
+    CoordinatesEntity getCoordinates();
     String getType();
 }
