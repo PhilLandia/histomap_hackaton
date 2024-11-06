@@ -2,15 +2,14 @@ package com.example.histomap.entity;
 
 public class PointGeometry implements GeoJsonGeometry {
     static String type = "Point";
-    float[] coordinates = new float[2];
+    CoordinatesEntity coordinates;
 
-    public PointGeometry( float x, float y ) {
-        coordinates[0] = x;
-        coordinates[1] = y;
+    public PointGeometry( double x, double y ) {
+        coordinates = new PointCoordinates( x, y );
     }
 
     @Override
-    public float[] getCoordinates() {
+    public CoordinatesEntity getCoordinates() {
         return coordinates;
     }
 
