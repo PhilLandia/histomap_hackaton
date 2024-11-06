@@ -35,7 +35,6 @@ intervalSlider.oninput = function() {
 let geojsonDataByYear = {}; // Формат: { 2023: { geojson: {}, annotation: "Текст" }, ... }
 // Функция добавления аннотации на карту для конкретного года
 // Функция добавления аннотации на карту для конкретного года с очисткой текущих аннотаций
-// Функция добавления аннотации на карту для конкретного года с очисткой текущих аннотаций
 function addAnnotation(year) {
     const annotationText = document.getElementById(`annotation-${year}`).value;
     if (!annotationText) {
@@ -45,18 +44,27 @@ function addAnnotation(year) {
 
     // Получаем координаты центра карты для размещения аннотации
     const center = map.getCenter();
-
-    // Проверяем, если для данного года еще нет объекта, создаем его
+    
+    // Проверяем, если для данного года еще нет объекта с geojson и annotations
     if (!geojsonDataByYear[year]) {
         geojsonDataByYear[year] = { geojson: null, annotations: [] };
+    } else if (!geojsonDataByYear[year].annotations) {
+        // Если массив annotations еще не существует, инициализируем его
+        geojsonDataByYear[year].annotations = [];
     }
 
-    // Создаем новый маркер с аннотацией и делаем его draggable
+    // Удаляем существующие аннотации для этого года перед добавлением новой
+    geojsonDataByYear[year].annotations.forEach(marker => {
+        map.removeLayer(marker);
+    });
+    geojsonDataByYear[year].annotations = []; // Очищаем массив аннотаций
+
+    // Создаем маркер с аннотацией и делаем его draggable
     const marker = L.marker([center.lat, center.lng], { draggable: true }).addTo(map)
         .bindPopup(annotationText)
         .openPopup();
 
-    // Добавляем новый маркер в массив аннотаций для текущего года
+    // Добавляем маркер в массив аннотаций для текущего года
     geojsonDataByYear[year].annotations.push(marker);
 
     // Сохраняем аннотированные данные для этого года
