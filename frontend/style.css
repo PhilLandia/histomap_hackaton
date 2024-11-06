@@ -1,0 +1,152 @@
+/* Общий стиль для всего сайта */
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Заголовок */
+h1 {
+    font-size: 36px;
+    margin: 20px 0;
+}
+#homePage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Полная высота страницы */
+    width: 100%;
+    text-align: center;
+}
+
+/* Настройки кнопок внутри homePage */
+#homePage .button {
+    margin: 15px 0; /* Отступ между кнопками */
+    text-align: center;
+}
+.button {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    background-color: #FFD700;
+    text-decoration: none;
+    border-radius: 10px;
+    margin: 20px 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(255, 215, 0, 0.4);
+}
+
+/* Скрытие страниц по умолчанию */
+.page {
+    display: flex;
+    flex-direction: column; /* Расположение элементов по вертикали */
+    align-items: center; /* Центрирование по горизонтали */
+    justify-content: center; /* Центрирование по вертикали */
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+}
+/* Секция параметров для создания карты */
+.map-parameters {
+    margin: 0 20px 20px 0; /* Отступ справа, чтобы отделить от карты */
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    width: 400px; /* Ширина, аналогичная временным меткам */
+    text-align: center;
+    display: flex;
+    flex-direction: column; /* Размещение элементов по вертикали */
+
+}
+
+.range-container {
+    display: flex;
+    align-items: center; /* Размещение ползунка и значения на одной строке */
+    gap: 10px; /* Пространство между ползунком и значением */
+}
+
+input[type="range"] {
+    width: 90%; /* Ширина ползунка */
+}
+
+button {
+    margin-top: 10px; /* Отступ сверху, чтобы кнопка не прилипала к ползунку */
+}
+
+.map-parameters label, .map-parameters input {
+    display: block;
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+/* Временные метки и контейнер карты */
+/* Контейнер для карты */
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Выровнять элементы по верху */
+    margin-top: 20px;
+    width: 100vw;
+    max-width: 100%;
+}
+
+.timestamps {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+    width: 400px;
+    margin-right: 20px;
+}
+
+.timestamp {
+    background-color: #444;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+/* Кнопка для генерации временных меток */
+.generate-button {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 18px;
+    color: #000;
+    background-color: #FFD700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.generate-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(255, 215, 0, 0.4);
+}
+
+
+.map-container {
+    flex-grow: 1;
+    background-color: #222;
+    border-radius: 10px;
+    height: 1000px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 24px;
+    align-self: flex-start; /* Гарантируем выравнивание по верхнему краю */
+}
