@@ -40,7 +40,7 @@ intervalSlider.oninput = function() {
     intervalValue.textContent = intervalSlider.value;
 }
 // Объект для хранения данных GeoJSON и аннотаций по годам
-let geojsonDataByYear = {}; // Формат: { 2023: { geojson: {}, annotation: "Текст" }, ... }
+let geojsonDataByYear = {}; // Формат: { 2023: { geojson: {}, annotation: [] }, ... }
 // Функция добавления аннотации на карту для конкретного года
 // Функция добавления аннотации на карту для конкретного года с очисткой текущих аннотаций
 function addAnnotation(year) {
@@ -306,9 +306,6 @@ function saveData() {
     Object.keys(geojsonDataByYear).forEach(year => {
         const geoJson = geojsonDataByYear[year].geojson;
 
-        // Извлекаем только координаты из geoJson, если данные присутствуют
-        const geoJsonCoordinates = geoJson ? geoJson.features.map(feature => feature.geometry.coordinates) : [];
-
         // Собираем данные аннотаций
         const annotations = geojsonDataByYear[year].annotations ? geojsonDataByYear[year].annotations.map(annotation => {
             const description = annotation.getPopup() ? annotation.getPopup().getContent() : "";
@@ -316,14 +313,14 @@ function saveData() {
 
             return {
                 description: description,
-                coordinates: coordinates
+                coordinates: [coordinates.lng, coordinates.lat]
             };
         }) : [];
 
         // Добавляем данные конкретного года в массив data
         mapData.data.push({
             year: parseInt(year),
-            geoJsonCoordinates: geoJsonCoordinates,
+            geoJson: geoJson,
             annotations: annotations
         });
     });
