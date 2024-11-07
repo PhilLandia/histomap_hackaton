@@ -1,20 +1,18 @@
 package com.example.histomap.entity;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 
-public class Point extends GeoJsonFeatureImpl {
+@Setter
+@Getter
+public class Point extends GeoJsonFeature {
 
-    HashMap<String, String> property;
-    public Point( double x, double y ) {
-        this.geometry = new PointGeometry( x, y );
-    }
+    HashMap<String, Object> properties;
 
-    public HashMap<String, String> getProperty() {
-        return property;
-    }
-
-    public void setProperty(HashMap<String, String> property) {
-        this.property = property;
+    public Point(double x, double y) {
+        this.geometry = new PointGeometry(x, y);
     }
 }

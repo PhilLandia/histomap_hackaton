@@ -7,7 +7,7 @@ import org.locationtech.jts.geom.MultiPolygon;
 public class FeatureDto {
     private Long id;
     private Integer year;
-    private String annotation;
+    private String note;
     private String color;
     private MultiPolygon geometry;
     private Long mapId;
