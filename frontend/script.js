@@ -242,14 +242,17 @@ function displayMapList() {
             mapList.innerHTML = ''; // Очищаем список перед добавлением новых элементов
 
             maps.forEach(map => {
-                // Создаем элемент списка для каждой карты
-                const listItem = document.createElement('li');
-                listItem.textContent = map.name;
-                
-                // Добавляем событие клика для загрузки выбранной карты
-                listItem.addEventListener('click', () => loadMapData(map.id));
-                
-                mapList.appendChild(listItem);
+                    // {id: mapName} - парсим этот формат
+                     Object.entries(map).forEach(([mapId, mapName]) => {
+                    // Создаем элемент списка для каждой карты
+                    const listItem = document.createElement('li');
+                    listItem.textContent = mapName;
+
+                    // Добавляем событие клика для загрузки выбранной карты
+                    listItem.addEventListener('click', () => loadMapData(mapId));
+
+                    mapList.appendChild(listItem);
+                });
             });
         })
         .catch(error => console.error('Ошибка при загрузке списка карт:', error));
@@ -257,17 +260,14 @@ function displayMapList() {
 
 // Функция для загрузки данных конкретной карты
 function loadMapData(mapId) {
-    fetch(`/api/maps/${mapId}`)
+    fetch(`/getMeta/${mapId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Данные карты:', data);
+            alert(JSON.stringify(data, null, 2));
             // Здесь можно добавить код для отображения данных карты
         })
         .catch(error => console.error('Ошибка при загрузке данных карты:', error));
 }
-
-// Вызов displayMapList() для начальной загрузки списка карт
-displayMapList();
 
 function loadMap(mapId) {
     const mapData = JSON.parse(localStorage.getItem(`map_${mapId}`));

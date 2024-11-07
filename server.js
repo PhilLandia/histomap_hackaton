@@ -11,7 +11,24 @@ app.use(express.static(path.join(__dirname, 'frontend')));
 // имитация внутреннего id карты
 let sequence = 0
 // имитация доп таблички в бд
-store = {} // {mapId: {name: "название карты", meta: {start: int end: int, step: int}}}
+store = {
+    100: {
+        name: "first test",
+        meta: {
+            start: 10,
+            end: 20,
+            step: 1
+        }
+    },
+    2000: {
+        name: "second test",
+        meta: {
+            start: 5,
+            end: 10,
+            step: 2
+        }
+    }
+} // {mapId: {name: "название карты", meta: {start: int end: int, step: int}}}
 
 function generatorID() {
     sequence += 1
@@ -20,9 +37,11 @@ function generatorID() {
 
 // Маршрут для получения списка карт из папки maps
 app.get('/ViewAllMaps', (req, res) => {
-    let result = {};
+    let result = [];
     Object.keys(store).forEach(mapID => {
-        result[mapID] = store[mapID]['name']
+        let obj = {}
+        obj[mapID] = store[mapID]['name']
+        result.push(obj);
     });
 
     res.status(200).json(result);
@@ -41,8 +60,9 @@ app.get('/ViewAllMaps', (req, res) => {
 
 // Маршрут для получения содержимого карты по названию файла
 app.get('/getMeta/:mapId', (req, res) => {
-      const meta = store[req.params.mapId] ? store[req.params.mapId]['meta'] : {}
-      res.status(200).json({meta: meta});
+        console.log("идентификатор карты", req.params.mapId)
+        const meta = store[req.params.mapId] ? store[req.params.mapId]['meta'] : {}
+        res.status(200).json({meta: meta});
 
 //    const mapPath = path.join(__dirname, 'maps', req.params.mapId);
 //    fs.readFile(mapPath, 'utf8', (err, data) => {
