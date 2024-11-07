@@ -1,5 +1,7 @@
 package com.example.histomap.services;
 
+import com.example.histomap.dtos.MapDto;
+import com.example.histomap.dtos.MapMetaDto;
 import com.example.histomap.entity.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,12 +13,12 @@ import java.util.HashMap;
 
 @Service
 public class UserMapService {
-    public MapName getMapName(UserMapEntity userMap) {
-        return new MapName( 0, userMap.getName() );
+    public MapDto getMapName(UserMapEntity userMap) {
+        return new MapDto(0L, userMap.getName() );
     }
 
-    public MapMeta getMapMeta(UserMapEntity userMap) {
-        return new MapMeta( userMap.getMeta().start(), userMap.getMeta().end(), userMap.getMeta().step() );
+    public MapMetaDto getMapMeta(UserMapEntity userMap) {
+        return new MapMetaDto( userMap.getMeta().start(), userMap.getMeta().end(), userMap.getMeta().step() );
     }
 
     public ArrayList<ObjectNode> getGeoJsons(UserMapEntity userMap) {

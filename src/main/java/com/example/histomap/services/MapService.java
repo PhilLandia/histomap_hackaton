@@ -26,7 +26,6 @@ public class MapService {
     public MapEntity saveMap(MapDto mapDto) {
         MapEntity map = new MapEntity();
         map.setName(mapDto.getName());
-        map.setDescription(mapDto.getDescription());
 
         return mapRepository.save(map);
     }
@@ -45,7 +44,7 @@ public class MapService {
                 .orElse(null);
 
         if (mapEntity != null) {
-            return new MapDto(mapEntity.getId(), mapEntity.getName(), mapEntity.getDescription());
+            return new MapDto(mapEntity.getId(), mapEntity.getName());
         }
         return null;
     }
