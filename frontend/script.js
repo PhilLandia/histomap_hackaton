@@ -235,7 +235,7 @@ function uploadGeoJSON(year) {
 
 function displayMapList() {
     // Выполняем запрос к серверу, чтобы получить список карт
-    fetch('/api/maps')
+    fetch('/ViewAllMaps')
         .then(response => response.json())
         .then(maps => {
             const mapList = document.getElementById('mapList');
@@ -294,10 +294,10 @@ function saveData() {
     // Создаем JSON-структуру для карты
     const mapData = {
         name: mapName,
-        range: {
-            startYear: parseInt(startYear),
-            endYear: parseInt(endYear),
-            interval: parseInt(interval)
+        meta: {
+            start: parseInt(startYear),
+            end: parseInt(endYear),
+            step: parseInt(interval)
         },
         data: []
     };
@@ -310,7 +310,7 @@ function saveData() {
         const geoJsonCoordinates = geoJson ? geoJson.features.map(feature => feature.geometry.coordinates) : [];
 
         // Собираем данные аннотаций
-        const annotations = geojsonDataByYear[year].annotations.map(annotation => {
+        const annotations = geojsonDataByYear[year].annotations ? geojsonDataByYear[year].annotations.map(annotation => {
             const description = annotation.getPopup() ? annotation.getPopup().getContent() : "";
             const coordinates = annotation.getLatLng ? annotation.getLatLng() : annotation.coordinates;
 
@@ -318,7 +318,7 @@ function saveData() {
                 description: description,
                 coordinates: coordinates
             };
-        });
+        }) : [];
 
         // Добавляем данные конкретного года в массив data
         mapData.data.push({
@@ -332,13 +332,16 @@ function saveData() {
     const jsonData = JSON.stringify(mapData, null, 2);
 
     // Отправляем данные на сервер для сохранения в файл
-    fetch('/save-map-data', {
+    fetch('/createMap', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: jsonData
     })
+    .then(response => response.json())
+    .then(data => alert(data['message'])) // потом можно добавить popup при успешном сохранении
+    .catch(error => alert('Ошибка при загрузке данных карты:', error)); // потом можно добавить popup при ошибке сохранении
 }
 
 
