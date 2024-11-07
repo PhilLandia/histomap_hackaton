@@ -1,9 +1,23 @@
 services:
-  qgis_server:
-    image: camptocamp/qgis-server
-    volumes:
-      - ./app_data/qgisserver:/etc/qgisserver
+  db:
+    image: postgis/postgis:17-3.5
+    container_name: postgis_db
     ports:
-      - "8080:80"
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - histomap_pgdata:/var/lib/postgresql/data
+
+  geoserver:
+    image: docker.osgeo.org/geoserver:2.26.0
+    container_name: geoserver
+    volumes:
+      - ./app_data/geoserver:/opt/geoserver_data
+    ports:
+      - "8080:8080"
     environment:
-      - QGIS_SERVER_LANDING_PAGE_PROJECTS_DIRECTORIES=/etc/qgisserver
+      - WEBAPP_CONTEXT=
+
+volumes:
+  histomap_pgdata:
