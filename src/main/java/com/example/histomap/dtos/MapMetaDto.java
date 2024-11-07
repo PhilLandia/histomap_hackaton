@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MapDto {
-    private Long id;
-    private String name;
+public class MapMetaDto {
+    private Integer start;
+    private Integer end;
+    private Integer step;
 }
