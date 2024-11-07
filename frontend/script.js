@@ -1,13 +1,21 @@
 // Показ главной страницы при загрузке
 document.addEventListener("DOMContentLoaded", function() {
-    showPage('homePage');
+    initializeMap();
 });
 
 // Функция для переключения страниц
 function showPage(pageId) {
+    // Скрываем все страницы
     document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
-    document.getElementById(pageId).style.display = 'block';
 
+    // Отображаем выбранную страницу
+    const selectedPage = document.getElementById(pageId);
+    selectedPage.style.display = 'block';
+
+    // Если мы переключаемся на страницу просмотра карт, обновляем список карт
+    if (pageId === 'viewMapPage') {
+        displayMapList();
+    }
     if (pageId === 'createMapPage') {
         initializeMap(); // Инициализация карты при переходе на страницу создания карты
     }
@@ -193,7 +201,7 @@ function displayGeoJSON(year) {
                 bounds.extend(marker.getLatLng()); // Добавляем маркер в расчет границ
             });
         }
-
+        console.log(geojsonDataByYear[year].annotations)
         // Устанавливаем границы карты, чтобы отображать все объекты и аннотации
         map.fitBounds(bounds);
     } else {
@@ -225,3 +233,114 @@ function uploadGeoJSON(year) {
     alert(`Загрузка GeoJSON для ${year}`);
 }
 
+function displayMapList() {
+    // Выполняем запрос к серверу, чтобы получить список карт
+    fetch('/api/maps')
+        .then(response => response.json())
+        .then(maps => {
+            const mapList = document.getElementById('mapList');
+            mapList.innerHTML = ''; // Очищаем список перед добавлением новых элементов
+
+            maps.forEach(map => {
+                // Создаем элемент списка для каждой карты
+                const listItem = document.createElement('li');
+                listItem.textContent = map.name;
+                
+                // Добавляем событие клика для загрузки выбранной карты
+                listItem.addEventListener('click', () => loadMapData(map.id));
+                
+                mapList.appendChild(listItem);
+            });
+        })
+        .catch(error => console.error('Ошибка при загрузке списка карт:', error));
+}
+
+// Функция для загрузки данных конкретной карты
+function loadMapData(mapId) {
+    fetch(`/api/maps/${mapId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Данные карты:', data);
+            // Здесь можно добавить код для отображения данных карты
+        })
+        .catch(error => console.error('Ошибка при загрузке данных карты:', error));
+}
+
+// Вызов displayMapList() для начальной загрузки списка карт
+displayMapList();
+
+function loadMap(mapId) {
+    const mapData = JSON.parse(localStorage.getItem(`map_${mapId}`));
+    if (mapData) {
+        displayGeoJSON(mapData); // Вызываем вашу функцию для отображения карты по данным из JSON
+    } else {
+        alert('Карта не найдена.');
+    }
+}
+
+function saveData() {
+    // Получаем информацию о карте из полей ввода
+    const mapName = document.getElementById('name-map').value;
+    const startYear = document.getElementById('start-year').value;
+    const endYear = document.getElementById('end-year').value;
+    const interval = document.getElementById('interval-range').value;
+
+    // Проверка, что все поля заполнены
+    if (!mapName || !startYear || !endYear || !interval) {
+        alert("Пожалуйста, заполните все поля информации о карте.");
+        return;
+    }
+
+    // Создаем JSON-структуру для карты
+    const mapData = {
+        name: mapName,
+        range: {
+            startYear: parseInt(startYear),
+            endYear: parseInt(endYear),
+            interval: parseInt(interval)
+        },
+        data: []
+    };
+
+    // Собираем данные из geojsonDataByYear для каждого года
+    Object.keys(geojsonDataByYear).forEach(year => {
+        const geoJson = geojsonDataByYear[year].geojson;
+
+        // Извлекаем только координаты из geoJson, если данные присутствуют
+        const geoJsonCoordinates = geoJson ? geoJson.features.map(feature => feature.geometry.coordinates) : [];
+
+        // Собираем данные аннотаций
+        const annotations = geojsonDataByYear[year].annotations.map(annotation => {
+            const description = annotation.getPopup() ? annotation.getPopup().getContent() : "";
+            const coordinates = annotation.getLatLng ? annotation.getLatLng() : annotation.coordinates;
+
+            return {
+                description: description,
+                coordinates: coordinates
+            };
+        });
+
+        // Добавляем данные конкретного года в массив data
+        mapData.data.push({
+            year: parseInt(year),
+            geoJsonCoordinates: geoJsonCoordinates,
+            annotations: annotations
+        });
+    });
+
+    // Преобразуем данные в JSON-строку
+    const jsonData = JSON.stringify(mapData, null, 2);
+
+    // Отправляем данные на сервер для сохранения в файл
+    fetch('/save-map-data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonData
+    })
+}
+
+
+// Обработчик для кнопки "Сохранить"
+document.getElementById('saveButton').addEventListener('click', saveData);
