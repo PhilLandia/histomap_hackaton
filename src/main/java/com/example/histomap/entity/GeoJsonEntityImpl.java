@@ -1,5 +1,7 @@
 package com.example.histomap.entity;
 
+import java.util.HashMap;
+
 public class GeoJsonEntityImpl implements GeoJsonEntity {
     GeoJsonGeometry geometry;
     String type;
@@ -13,4 +15,5 @@ public class GeoJsonEntityImpl implements GeoJsonEntity {
     public String getType() {
         return type;
     }
+
 }

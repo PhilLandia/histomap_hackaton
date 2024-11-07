@@ -35,6 +35,7 @@ public class Controller {
     public void createMap(@RequestBody UserMapEntity userMap) {
         MapName mapName = userMapService.getMapName ( userMap );
         MapMeta mapMeta = userMapService.getMapMeta( userMap );
+        userMapService.getGeoJsons( userMap );
         System.out.println( mapName );
     }
 
