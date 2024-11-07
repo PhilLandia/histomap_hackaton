@@ -4,17 +4,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "maps")
+@Table(name = "map_names")
 @Data
-public class MapEntity {
-
+public class MapNameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
 }

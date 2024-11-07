@@ -1,6 +1,10 @@
 package com.example.histomap.entity;
 
-public interface GeoJsonEntity {
-    String getType();
-    GeoJsonGeometry getGeometry();
+import lombok.Getter;
+
+@Getter
+public class GeoJsonEntity {
+    GeoJsonGeometry geometry;
+    String type;
+
 }

@@ -1,5 +1,8 @@
 package com.example.histomap.entity;
 
+import lombok.Getter;
+
+@Getter
 public class PointCoordinates extends CoordinatesEntity {
     double[] coords;
 
@@ -9,7 +12,4 @@ public class PointCoordinates extends CoordinatesEntity {
         coords[1] = y;
     }
 
-    public double[] getCoords() {
-        return coords;
-    }
 }

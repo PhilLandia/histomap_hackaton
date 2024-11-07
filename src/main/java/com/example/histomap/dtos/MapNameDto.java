@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MapDto {
-    private Long id;
+public class MapNameDto {
     private String name;
 }
