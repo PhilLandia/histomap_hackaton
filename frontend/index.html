@@ -14,7 +14,7 @@
 
     <!-- Главная страница -->
     <div id="homePage" class="page">
-        <a href="#" class="button" onclick="showPage('viewMapPage')">Смотреть карту</a>
+        <a href="#" class="button" onclick="showPage('viewMapsMeta')">Смотреть карту</a>
         <a href="#" class="button" onclick="showPage('createMapPage')">Создать карту</a>
     </div>
 
@@ -57,11 +57,27 @@
         <button class="generate-button" id="saveButton"><b>Сохранить</b></button>
         <a href="#" class="button" onclick="showPage('homePage')">Назад</a>
     </div>
-    <div id="viewMapPage" class="page" style="display:none;">
+    <div id="viewMapsMeta" class="page" style="display:none;">
         <h1>Список карт</h1>
         <!-- <input type="file" id="mapFilesInput" multiple accept=".json" /> -->
-        <ul id="mapList"></ul>
+        <ul id="mapList" style="font-size: 30px;"></ul>
         <a href="#" class="button" onclick="showPage('homePage')">Назад</a>
+    </div>
+    <div id="viewMapPage" class="page full-width">
+        <h1 id="currentMapName">Здесь будет название текущей карты</h1>
+
+        <div class="container">
+            <div class="left-panel">
+                <div class="map-current-page">
+                    <h3>Доступные годы:</h3>
+                    <ul id="mapCurrentPage">
+                        <!--  здесь будут элементы li для ссылок на года -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" class="button" onclick="showPage('viewMapsMeta')">Назад</a>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
