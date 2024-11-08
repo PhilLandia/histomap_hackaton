@@ -45,14 +45,6 @@ public class MapMetaService {
 
     @Transactional(readOnly = true)
     public MapMetaEntity getMapMetaByMapId(Long mapNamesId) {
-        MapMetaEntity mapMeta = new MapMetaEntity();
-
-        MapNameEntity mapNames = mapNameRepository
-                .findById(mapNamesId)
-                .orElseThrow(() -> new IllegalArgumentException("Map not found"));
-
-        mapMeta.setMapNames(mapNames);
-
         List<MapMetaEntity> mapMetaEntityList = mapMetaRepository.findByMapNames_Id(mapNamesId);
 
         if (!mapMetaEntityList.isEmpty()) {

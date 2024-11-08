@@ -10,8 +10,27 @@ services:
       POSTGRES_DB: postgis_db
     ports:
       - "5432:5432"
+    networks:
+      - app-network
     volumes:
       - histomap_pgdata:/var/lib/postgresql/data
+
+  springboot-app:
+    build: .
+    container_name: histomap
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgis:5432/postgis_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgis
+    networks:
+      - app-network
+    command: ["sh", "-c", "sleep 10 && java -jar /app/Histomap.jar"]
+    restart: on-failure
 
   geoserver:
     image: docker.osgeo.org/geoserver:2.26.0
@@ -22,6 +41,12 @@ services:
       - "8080:8080"
     environment:
       - WEBAPP_CONTEXT=
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   histomap_pgdata:
