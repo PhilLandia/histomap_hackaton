@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 @Service
 public class FeatureService {
@@ -51,6 +53,9 @@ public class FeatureService {
                 text = properties.get("text").asText();
             }
 
+            Random random = new Random();
+            Color color = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+            String hex = "#"+Integer.toHexString(color.getRGB()).substring(2).toUpperCase();
 
             entityManager
                     .createNativeQuery(
@@ -61,7 +66,7 @@ public class FeatureService {
                     .setParameter("geoJson", geoJsonGeometry.toString())
                     .setParameter("note", text)
                     .setParameter("year", year)
-                    .setParameter("color", "#FF0000")
+                    .setParameter("color", hex)
                     .setParameter("mapId", map.getId())
                     .executeUpdate();
         });
