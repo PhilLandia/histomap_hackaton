@@ -15,6 +15,23 @@ services:
     volumes:
       - histomap_pgdata:/var/lib/postgresql/data
 
+  init_db:
+    image: postgis/postgis:16-3.5
+    container_name: init_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGPASSWORD: postgres
+      POSTGRES_DB: postgis_db
+    networks:
+      - app-network
+    depends_on:
+      - postgis
+    volumes:
+      - ./src/main/resources/sqlscripts:/var/lib/postgresql/data
+      - ./src/main/resources/sqlscripts:/sqlscripts
+    command: ["sh", "-c", "sleep 10 && psql -h postgis -U postgres -d postgis_db -f /sqlscripts/layers.sql"]
+
   springboot-app:
     build: .
     container_name: histomap
@@ -29,18 +46,33 @@ services:
       - postgis
     networks:
       - app-network
-    command: ["sh", "-c", "sleep 10 && java -jar /app/Histomap.jar"]
+    command: ["sh", "-c", "sleep 15 && java -jar /app/Histomap.jar"]
     restart: on-failure
 
   geoserver:
     image: docker.osgeo.org/geoserver:2.26.0
     container_name: geoserver
     volumes:
-      - ./app_data/geoserver:/opt/geoserver_data
+      - ./geoserver_metadata:/opt/geoserver_data
     ports:
-      - "8080:8080"
+      - "8081:8080"
     environment:
       - WEBAPP_CONTEXT=
+    networks:
+      - app-network
+    depends_on:
+      - springboot-app
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    environment:
+      NODE_ENV: production
     networks:
       - app-network
 
