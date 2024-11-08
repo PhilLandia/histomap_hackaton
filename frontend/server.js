@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname)));
 let sequence = 0
 // имитация доп таблички в бд
 store = {
-    100: {
+    1000: {
         name: "first test",
         meta: {
             start: 10,
@@ -62,7 +62,7 @@ app.get('/ViewAllMaps', (req, res) => {
 app.get('/getMeta/:mapId', (req, res) => {
         console.log("идентификатор карты", req.params.mapId)
         const meta = store[req.params.mapId] ? store[req.params.mapId]['meta'] : {}
-        res.status(200).json({meta: meta});
+        res.status(200).json(meta);
 
 //    const mapPath = path.join(__dirname, 'maps', req.params.mapId);
 //    fs.readFile(mapPath, 'utf8', (err, data) => {
