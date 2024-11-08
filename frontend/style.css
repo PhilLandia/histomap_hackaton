@@ -67,7 +67,18 @@ h1 {
     text-align: center;
     display: flex;
     flex-direction: column; /* Размещение элементов по вертикали */
+}
 
+/* Секция параметров для отрисовки карт */
+.map-current-page {
+    margin: 0 20px 20px 0; /* Отступ справа, чтобы отделить от карты */
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    width: 400px; /* Ширина, аналогичная временным меткам */
+    display: flex;
+    flex-direction: column; /* Размещение элементов по вертикали */
+    font-size: 25px;
 }
 
 .range-container {

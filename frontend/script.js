@@ -1,6 +1,7 @@
 // Показ главной страницы при загрузке
 document.addEventListener("DOMContentLoaded", function() {
     initializeMap();
+    showPage('homePage');
 });
 
 // Функция для переключения страниц
@@ -13,11 +14,15 @@ function showPage(pageId) {
     selectedPage.style.display = 'block';
 
     // Если мы переключаемся на страницу просмотра карт, обновляем список карт
-    if (pageId === 'viewMapPage') {
+    if (pageId === 'viewMapsMeta') {
         displayMapList();
     }
     if (pageId === 'createMapPage') {
         initializeMap(); // Инициализация карты при переходе на страницу создания карты
+    }
+
+    if (pageId === 'viewMapPage') {
+        displayMapPage();
     }
 }
 
@@ -233,6 +238,26 @@ function uploadGeoJSON(year) {
     alert(`Загрузка GeoJSON для ${year}`);
 }
 
+function displayMapPage() {
+    const mapNameElement = document.getElementById('currentMapName');
+    mapNameElement.textContent = `${currentMapInfo.mapName}, год: ${currentMapInfo.currentYear}`;
+
+    const yearsListElement = document.getElementById('mapCurrentPage');
+    yearsListElement.innerHTML = '';
+
+    for (let year = currentMapInfo.start; year <= currentMapInfo.end; year += currentMapInfo.step) {
+        const listItem = document.createElement('li');
+        listItem.textContent = year;
+        listItem.addEventListener('click', () => updateShowYear(year));
+        yearsListElement.appendChild(listItem);
+    }
+}
+
+function updateShowYear(year) {
+    currentMapInfo.currentYear = year;
+    showPage('viewMapPage');
+}
+
 function displayMapList() {
     // Выполняем запрос к серверу, чтобы получить список карт
     fetch('/ViewAllMaps')
@@ -249,7 +274,7 @@ function displayMapList() {
                     listItem.textContent = mapName;
 
                     // Добавляем событие клика для загрузки выбранной карты
-                    listItem.addEventListener('click', () => loadMapData(mapId));
+                    listItem.addEventListener('click', () => loadMapData(mapId, mapName));
 
                     mapList.appendChild(listItem);
                 });
@@ -258,13 +283,31 @@ function displayMapList() {
         .catch(error => console.error('Ошибка при загрузке списка карт:', error));
 }
 
+// объект для хранения меты текущей страницы (кастыль, надо через pattern rejectry но я в js не очень)
+let currentMapInfo = {
+    mapId: 0,
+    mapName: "empty name",
+    start: 0,
+    end: 0,
+    step: 0,
+    currentYear: 0
+};
+
 // Функция для загрузки данных конкретной карты
-function loadMapData(mapId) {
+function loadMapData(mapId, mapName) {
     fetch(`/getMeta/${mapId}`)
         .then(response => response.json())
         .then(data => {
-            alert(JSON.stringify(data, null, 2));
-            // Здесь можно добавить код для отображения данных карты
+            currentMapInfo = {
+                mapId: mapId,
+                mapName: mapName,
+                start: data.start,
+                end: data.end,
+                step: data.step,
+                currentYear: data.start
+            };
+
+            showPage('viewMapPage');
         })
         .catch(error => console.error('Ошибка при загрузке данных карты:', error));
 }
