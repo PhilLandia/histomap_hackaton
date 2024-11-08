@@ -1,0 +1,7 @@
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+frontend/node_modules
+test_dataset
+maps
