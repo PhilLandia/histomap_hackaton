@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивная карта</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+</head>
+
+<body>
+    <h1>Интерактивная историческая карта</h1>
+
+    <!-- Главная страница -->
+    <div id="homePage" class="page">
+        <a href="#" class="button" onclick="showPage('viewMapPage')">Смотреть карту</a>
+        <a href="#" class="button" onclick="showPage('createMapPage')">Создать карту</a>
+    </div>
+
+    <!-- Страница "Создать карту" -->
+    <div id="createMapPage" class="page full-width">
+        <h1>Создать карту</h1>
+
+        <div class="container">
+            <!-- Блок параметров и временных меток -->
+            <div class="left-panel">
+                <div class="map-parameters">
+                    <label for="map-name">Название карты</label>
+                    <input type="text" id="name-map" placeholder="Введите название карты" required>
+                    <label for="start-year">Начало диапазона:</label>
+                    <input type="number" id="start-year" placeholder="Введите начальный год" required>
+
+                    <label for="end-year">Конец диапазона:</label>
+                    <input type="number" id="end-year" placeholder="Введите конечный год" required>
+
+                    <label for="interval">Интервал меток (в годах):</label>
+                    <div class="range-container">
+                        <input type="range" id="interval-range" name="interval" min="0" max="100" value="1" step="1"
+                            required>
+                        <span id="intervalValue">1</span>
+                    </div>
+                    <button class="generate-button" onclick="generateTimestamps()">Создать временные метки</button>
+
+                </div>
+
+                <div class="timestamps" id="timestamps">
+                    <p>Временные метки появятся здесь</p>
+                </div>
+            </div>
+
+            <!-- Контейнер для карты отдельно -->
+            <div id="map" class="map-container">
+                <!-- Карта будет отображаться здесь -->
+            </div>
+        </div>
+        <button class="generate-button" id="saveButton"><b>Сохранить</b></button>
+        <a href="#" class="button" onclick="showPage('homePage')">Назад</a>
+    </div>
+    <div id="viewMapPage" class="page" style="display:none;">
+        <h1>Список карт</h1>
+        <!-- <input type="file" id="mapFilesInput" multiple accept=".json" /> -->
+        <ul id="mapList"></ul>
+        <a href="#" class="button" onclick="showPage('homePage')">Назад</a>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
