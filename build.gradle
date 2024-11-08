@@ -13,6 +13,10 @@ java {
     }
 }
 
+bootJar {
+    mainClass = 'com.example.histomap.HistomapApplication'
+}
+
 repositories {
     mavenCentral()
 }

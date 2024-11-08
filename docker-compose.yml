@@ -4,8 +4,31 @@ services:
   postgis:
     image: postgis/postgis:16-3.5
     environment:
-      POSTGRES_USER: postgres  # Replace with your preferred username
-      POSTGRES_PASSWORD: postgres  # Replace with your preferred password
-      POSTGRES_DB: postgis_db  # Replace with your preferred database name
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgis_db
     ports:
       - "5432:5432"
+    networks:
+      - app-network
+
+  springboot-app:
+    build: .
+    container_name: histomap
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgis:5432/postgis_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgis
+    networks:
+      - app-network
+    command: ["sh", "-c", "sleep 100 && java -jar /app/Histomap.jar"]
+    restart: on-failure
+
+networks:
+  app-network:
+    driver: bridge

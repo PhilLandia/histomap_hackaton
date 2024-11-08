@@ -47,8 +47,6 @@ public class InputMapService {
             geoJsons.add(geoJson);
         });
 
-        geoJsons.forEach(System.out::println);
-
         return geoJsons;
     }
 
